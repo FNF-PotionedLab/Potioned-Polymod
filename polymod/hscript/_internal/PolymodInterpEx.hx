@@ -15,14 +15,21 @@ import polymod.hscript._internal.PolymodClassDeclEx.PolymodClassImport;
 @:access(polymod.hscript._internal.PolymodAbstractScriptClass)
 class PolymodInterpEx extends Interp
 {
+	private static var _defaultVariables:Map<String, Dynamic> = [];
+
 	var targetCls:Class<Dynamic>;
 
 	public function new(targetCls:Class<Dynamic>, proxy:PolymodAbstractScriptClass)
 	{
 		super();
 		_proxy = proxy;
+		variables.set("Type", Type);
 		variables.set("Math", Math);
 		variables.set("Std", Std);
+
+		for(key => value in _defaultVariables)
+			variables.set(key, value);
+
 		this.targetCls = targetCls;
 	}
 
