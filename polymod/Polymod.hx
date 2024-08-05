@@ -884,6 +884,14 @@ class ModMetadata
 	public var modPath:String;
 
 	/**
+	 * Whether or not this mod will always be loaded
+	 * alongside other mods, this functionality is only implemented
+	 * within Funkin Potioned itself!
+	 */
+	@:optional
+	public var alwaysLoaded:Null<Bool> = null;
+
+	/**
 	 * `metadata` provides an optional list of keys.
 	 * These can provide additional information about the mod, specific to your application.
 	 */
@@ -957,6 +965,12 @@ class ModMetadata
 		Reflect.setField(json, 'api_version', apiVersion.toString());
 		Reflect.setField(json, 'mod_version', modVersion.toString());
 		Reflect.setField(json, 'license', license);
+
+		if(alwaysLoaded != null)
+			Reflect.setField(json, 'always_loaded', alwaysLoaded);
+		else
+			Reflect.setField(json, 'always_loaded', false);
+
 		var meta = {};
 		for (key in metadata.keys())
 		{
@@ -1011,6 +1025,11 @@ class ModMetadata
 			Polymod.error(PARSE_MOD_VERSION, 'Error parsing mod version: (${msg}) ${PolymodConfig.modMetadataFile} was ${str}');
 			return null;
 		}
+		if(json.always_loaded != null)
+			m.alwaysLoaded = json.always_loaded;
+		else
+			m.alwaysLoaded = false;
+
 		m.license = JsonHelp.str(json, 'license');
 		m.metadata = JsonHelp.mapStr(json, 'metadata');
 
